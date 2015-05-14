@@ -10,4 +10,10 @@
         <strong>Christian Ntong</strong><br/>
         <i>finey2000@gmail.com</i>
     </section>
+<section>
+    <strong>Keyboard Shortcuts</strong><br/>
+    [shift+del] = skip multiple trials and display real answer <br>
+    [ctrl+del] = pronounce word (after answer has been displayed - works for chrome browser only)<br/>
+    [enter] = submit answer or display next question
+</section>
 <p></p><a href='<?=show_site()?>' class='submit_button1' >Home</a>  <p></p>      

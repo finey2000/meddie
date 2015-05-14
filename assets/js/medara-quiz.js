@@ -72,6 +72,10 @@ function Medara_quiz(quiz_body_id,site_url)
         //set up audible reading
         if(window.speechSynthesis){
             $('#audibly').click($.proxy(this.speak_aloud,this));
+            //set key handler for text aloud
+            $(document).keydown(function(key){
+                if(key.keyCode == 46 && key.ctrlKey) $('#audibly').trigger('click');
+            });
         }else{
             $('#audibly').remove();
         }
@@ -369,6 +373,10 @@ Medara_quiz.prototype.notify_wrong_answer = function()
     var remaining_trials = --this.trials_count;
     this.quiz_page.notify_block.html('Incorrect Answer: Please try again. '+remaining_trials+' trials remaining.<strong> <a href="#" id="submit_anyway_link">submit anyway</a></strong>').show();
     $('#submit_anyway_link').click({'submit_anyway':true},$.proxy(this.submit_answer,this));
+    //assign escape key to submit anyway button
+    $(document).keydown(function(key){
+        if(key.keyCode == 46 && key.shiftKey) $('#submit_anyway_link').trigger('click');
+    });
 };
 /**
  * receives submitted answer

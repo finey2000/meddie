@@ -26,7 +26,7 @@ public function __construct(){
  public function define_array_column()
  {
      if(function_exists('array_column')) return;
-     $array_helper_file = '../../includes/general/array_helper.php';
+     $array_helper_file = '../../chris_includes/general/array_helper.php';
      if(!is_file($array_helper_file)) return;
 include_once $array_helper_file;
  }

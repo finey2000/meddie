@@ -6,6 +6,7 @@ $config = array();
 //$config['site_url'] = 'http://192.168.1.126/meddie';
 $config['site_url'] = 'http://meddie.chrisntong.com';
 $config['db_host'] = '104.236.140.98';
+//$config['db_host'] = '192.168.1.124';
 $config['db_user'] = 'smuguser';
 $config['db_pswd'] = 'smugpswd';
 $config['db_name'] = 'medara';

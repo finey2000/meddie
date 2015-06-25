@@ -478,7 +478,7 @@ Medara_quiz.prototype.process_answer = function(answer)
                 //prepare next question
                 this.prepare_next_question();  
                 //if autonew is set, display new question after a timeout
-                if(this.quiz_status.autonew) setTimeout($.proxy(this.next_action,this),2000);                
+                if(this.quiz_status.autonew) setTimeout($.proxy(this.next_action,this),1000);                
             }else{
                 this.quiz_status.next_action = 'result';
                 this.sync_quiz_data();

@@ -18,11 +18,10 @@ window.onload = function(){
 
 <section id='multi_block'>
 <p>
-<input type="radio" name="answer" value="{option_a}" /><span>{option_a}</span>
-<input type="radio" name="answer" value="{option_b}"/><span>{option_b}</span>
-<br/>
-<input type="radio" name="answer" value="{option_c}" /><span>{option_c}</span>
-<input type="radio" name="answer" value="{option_d}"/><span>{option_d}</span>
+<input type="button" class='submit_button1' name="answer" value="{option_a}" /> <br/>
+<input type="button" class='submit_button1' name="answer" value="{option_b}"/> <br/>
+<input type="button" class='submit_button1' name="answer" value="{option_c}" /> <br/>
+<input type="button" class='submit_button1' name="answer" value="{option_d}"/> <br/>
 </p>
 </section>
 
@@ -30,9 +29,9 @@ window.onload = function(){
     <input type=text name=answer autocomplete=off placeholder="Your answer" />
 </div>
 
-<p>
+<div id="submitButton">
 <input type=submit value='submit' class='submit_button1' />
-</p>
+</div>
 </form>
 </div>
 

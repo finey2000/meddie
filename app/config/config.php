@@ -2,13 +2,14 @@
 if(!defined('BASEPATH')) exit('Indirect Script Access not allowed');
 
 $config = array();
-//$config['site_url'] = 'http://meddie.local';
+$config['site_url'] = 'http://meddie.local';
 //$config['site_url'] = 'http://192.168.1.126/meddie';
-$config['site_url'] = 'http://meddie.chrisntong.com';
-$config['db_host'] = 'localhost';
+//$config['site_url'] = 'http://meddie.chrisntong.com';
+//$config['db_host'] = '23.229.171.134';
+$config['db_host'] = '192.168.1.124';
 $config['db_user'] = 'smuguser';
 $config['db_pswd'] = 'smugpswd';
-$config['db_name'] = 'medara'; 
+$config['db_name'] = 'medara';
 $config['assets_url'] = $config['site_url'].'/assets';
 $config['default_libraries'] = array('dataman'=>'dataman','utility'=>'utility'); //array('class_name'=>'set_name')
 $config['default_models'] = array('users_model'=>'users_model','quiz_model'=>'quiz_model','func_model'=>'func_model'); //array('class_name'=>'set_name')

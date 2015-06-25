@@ -337,7 +337,8 @@ if($source_questions == 1) $category = $form['category'];
 else $category = null;
 $multiple_trials = $form['mtrials'];
 $autospeak = intval($form['autospeak']);
-$this->quiz_model->Setup_New_Quiz($mode,$questions,$source_questions,$multiple_trials,$autospeak,$category);
+$autonew = intval($form['autonew']);
+$this->quiz_model->Setup_New_Quiz($mode,$questions,$source_questions,$multiple_trials,$autospeak,$autonew,$category);
 return true;
 
 }

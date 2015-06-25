@@ -317,6 +317,11 @@ section #result_block{
 
 #multi_block{
     font-size: 1.5em;
+    text-align: center;
+}
+
+#multi_block input{
+    margin-top:5px;
 }
 
 #single_block input{

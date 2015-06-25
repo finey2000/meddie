@@ -336,7 +336,8 @@ if($source_questions < 1 || $source_questions > 3){
 if($source_questions == 1) $category = $form['category'];
 else $category = null;
 $multiple_trials = $form['mtrials'];
-$this->quiz_model->Setup_New_Quiz($mode,$questions,$source_questions,$multiple_trials,$category);
+$autospeak = intval($form['autospeak']);
+$this->quiz_model->Setup_New_Quiz($mode,$questions,$source_questions,$multiple_trials,$autospeak,$category);
 return true;
 
 }

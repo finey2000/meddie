@@ -50,7 +50,7 @@ private function Get_Quiz_Data($name){
 return $this->quiz_data[$name];
 }
 
-public function Setup_New_Quiz($mode,$requested_qs,$source_questions,$multiple_ts,$category = null){
+public function Setup_New_Quiz($mode,$requested_qs,$source_questions,$multiple_ts,$autospeak,$category = null){
 	//if requested source question is from language/category
 	if($source_questions == 1 && is_numeric($category)){
 //retrieve available questions according to selected  category
@@ -87,8 +87,9 @@ $this->Save_Quiz_Data('prev_qs',array()); //an array containing the ids and grad
 $this->Save_Quiz_Data('prev_qs_ids',array()); //a multi array containing just the ids of all previous questions
 $this->Save_Quiz_Data('prev_q',array()); //an array containing info about the last question askes
 $this->Save_Quiz_Data('prev_q_id',0); //id of previous question asked
-$this->Save_Quiz_Data('prev_q_no',0); //number of previous question askes
+$this->Save_Quiz_Data('prev_q_no',0); //number of previous question asked
 $this->Save_Quiz_Data('multiple_answers',array());//contains an array of multiple answers saved from the current asked questions
+$this->Save_Quiz_Data('autospeak',$autospeak); // set whether to auto speak words after disclosure
 }
 
 /**
@@ -117,6 +118,7 @@ private function load_quiz_status()
     $all_questions = $this->Count_Total_Test_Questions();
    $this->set_quiz_status('game_over', $this->Quiz_Over());
    $this->set_quiz_status('multi_mode', $this->Is_Multi_Mode());
+   $this->set_quiz_status('autospeak', $this->autospeakEnabled());   
    $this->set_quiz_status('allow_multiple_trials', $this->Allows_Multiple_Trials());
    $this->set_quiz_status('answered_questions', $answered_questions);
    $this->set_quiz_status('total_questions', $all_questions);
@@ -344,6 +346,16 @@ $mode = $this->Get_Quiz_Data('mode');
 if($mode == 1){
 return true;}
 return false;
+}
+
+/**
+ * returns if autospeak is enabled in quiz or not
+ * @return boolean
+ */
+public function autospeakEnabled(){
+//checks if quiz is in multi options mode
+if($this->Get_Quiz_Data('autospeak') == 1) return true;
+return false; //else
 }
 
 /**

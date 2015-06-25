@@ -93,6 +93,12 @@ function validate_form()
 </section> 
 
 <section>
+<h4 title="Automatically pronounce words after results disclosure">Allow Auto Speak</h4>
+<input type="radio" name="autospeak" value="1"  />Yes
+<input type="radio" name="autospeak" value="0" CHECKED />No
+</section>
+
+<section>
 <h4>Questions</h4>
 <select name="questions">
 <option selected value='<?php echo $all_value ?>' >All Questions </option>

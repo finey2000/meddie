@@ -15,6 +15,7 @@ function Medara_quiz(quiz_body_id,site_url)
 		Medara_quiz.prototype.available_ques = new Array();
                 Medara_quiz.prototype.latest_ques = [];
 		Medara_quiz.prototype.sync_success = false;
+		Medara_quiz.prototype.submit_anyway = false;                
 		Medara_quiz.prototype.load_failure = false;
 		Medara_quiz.prototype.load_interval_id = null;
 		Medara_quiz.prototype.questions_per_load = 4;
@@ -51,7 +52,8 @@ function Medara_quiz(quiz_body_id,site_url)
                         'j_total_questions':0,    //count of total questions from front end
                         'current_question':0,
 			'allow_multiple_trials':false,
-                        'next_action':null
+                        'next_action':null,
+                        'autospeak': false
 		};
                 Medara_quiz.prototype.sync_success_action = null;
                 Medara_quiz.prototype.sync_failure_action = null;
@@ -74,11 +76,16 @@ function Medara_quiz(quiz_body_id,site_url)
             $('#audibly').click($.proxy(this.speak_aloud,this));
             //set key handler for text aloud
             $(document).keydown(function(key){
-                if(key.keyCode == 46 && key.ctrlKey) $('#audibly').trigger('click');
+                if((key.key == 'Enter' || key.keyCode=='13') && key.ctrlKey) $('#audibly').trigger('click');
             });
         }else{
             $('#audibly').remove();
         }
+        
+    //set key handler for submit anyway button
+    $(document).keydown($.proxy(function(key){       
+        if((key.key == 'Enter' || key.keyCode=='13') && key.shiftKey) this.submit_anyway = true;
+    },this));        
  
         //get quiz subject ids
         jQuery.get(this.site_url+'get-subjects',{},$.proxy(this.load_subjects,this));
@@ -314,7 +321,6 @@ Medara_quiz.prototype.sync_quiz_data = function()
 	this.posted_answered_questions = this.answered_ques;
         this.answered_ques = [];
                  this.current_request_ids = this.get_request_ids();       
-                 console.log('syncing');
 	var post_data = JSON.stringify({'answered_ques':this.posted_answered_questions,'request_ids':this.current_request_ids});
 	jQuery.post(this.site_url+'sync-quiz-data',{'quiz_data':post_data},$.proxy(this.handle_sync_success,this));
 	
@@ -345,6 +351,7 @@ Medara_quiz.prototype.handle_sync_success = function(new_data){
 		this.quiz_status.game_over = s_quiz_status.game_over;
 		this.quiz_status.multi_mode = s_quiz_status.multi_mode;
 		this.quiz_status.allow_multiple_trials = s_quiz_status.allow_multiple_trials;
+                this.quiz_status.autospeak = s_quiz_status.autospeak;                
                // this.quiz_status.more_questions = s_quiz_status.more_questions; //boolean that tells if there are more questions on the server side
 		//if the game is yet to be over
 		if(! this.quiz_status.game_over){
@@ -373,10 +380,6 @@ Medara_quiz.prototype.notify_wrong_answer = function()
     var remaining_trials = --this.trials_count;
     this.quiz_page.notify_block.html('Incorrect Answer: Please try again. '+remaining_trials+' trials remaining.<strong> <a href="#" id="submit_anyway_link">submit anyway</a></strong>').show();
     $('#submit_anyway_link').click({'submit_anyway':true},$.proxy(this.submit_answer,this));
-    //assign escape key to submit anyway button
-    $(document).keydown(function(key){
-        if(key.keyCode == 46 && key.shiftKey) $('#submit_anyway_link').trigger('click');
-    });
 };
 /**
  * receives submitted answer
@@ -387,14 +390,17 @@ Medara_quiz.prototype.submit_answer = function(event)
     event.preventDefault();    
     //check if submit_anyway data has been passed
     var submit_anyway = false;
-    if(event.data && event.data.submit_anyway) submit_anyway = event.data.submit_anyway;    
+    if(this.submit_anyway) submit_anyway = this.submit_anyway;     
+    else if(event.data && event.data.submit_anyway) submit_anyway = event.data.submit_anyway;  
+    this.submit_anyway = false;
 	var answer = this.get_answer().trim();
 	//check that input has been entered
-	if(!answer){
+	if(!answer && !submit_anyway){
 		//this.notify_answer('You must Enter A Value to proceed');
                 this.quiz_page.notify_block.text('You must Enter A Value to proceed').show();
 		return;
 	}
+        if(!answer) answer = '=empty='; //define answer in case it was not provided
 	var real_answer = this.current_question.answer.trim();	
 	//validate answer       
 	if((answer.toLowerCase() !== real_answer.toLowerCase()) && this.quiz_status.allow_multiple_trials && this.trials_count && !(submit_anyway))
@@ -441,6 +447,8 @@ Medara_quiz.prototype.process_answer = function(answer)
         //this.quiz_page.result_details.hide();
         //set audibly word
         this.audibly_word = cur_ques.answer;
+        //if autospeak is enabled, pronouce word
+        if(this.quiz_status.autospeak) this.speak_aloud(2);        
             //define next action to be set
             if(this.more_questions()){
                 this.quiz_status.next_action = 'question';
@@ -459,14 +467,19 @@ Medara_quiz.prototype.process_answer = function(answer)
 this.quiz_page.next_action.focus();
   };
   
-  /**
+   /**
    * Reads aloud the last answer
    * @returns {undefined}
    */
-  Medara_quiz.prototype.speak_aloud = function()
+  Medara_quiz.prototype.speak_aloud = function(times)
   {
+      if(!window.speechSynthesis) return;
       var word = new SpeechSynthesisUtterance(this.audibly_word);
+      if(typeof times != 'number') times = 1;            
+      while(times > 0){
       window.speechSynthesis.speak(word);
+      times--;
+        }
   };
   
   /**

@@ -1,15 +1,17 @@
 <?php 
 if(!defined('BASEPATH')) exit('Indirect Script Access not allowed');
 
+/*
+ * Please include your access credentials(credentials.php) file here to enable app connect to your database
+ * I choose to gitignore my credentials so I can keep my database credentials private
+ */
+include('credentials.php');
 $config = array();
-//$config['site_url'] = 'http://meddie.local';
-//$config['site_url'] = 'http://192.168.1.126/meddie';
-$config['site_url'] = 'http://meddie.chrisntong.com';
-$config['db_host'] = '104.236.140.98';
-//$config['db_host'] = '192.168.1.124';
-$config['db_user'] = 'smuguser';
-$config['db_pswd'] = 'smugpswd';
-$config['db_name'] = 'medara';
+$config['site_url'] = $site_url;
+$config['db_host'] = $db_host;
+$config['db_user'] = $db_user;
+$config['db_pswd'] = $db_pswd;
+$config['db_name'] = $db_name;
 $config['assets_url'] = $config['site_url'].'/assets';
 $config['default_libraries'] = array('dataman'=>'dataman','utility'=>'utility'); //array('class_name'=>'set_name')
 $config['default_models'] = array('users_model'=>'users_model','quiz_model'=>'quiz_model','func_model'=>'func_model'); //array('class_name'=>'set_name')

@@ -67,20 +67,15 @@ class Init extends Lobby {
 	 */
 	private function get_url_action()
 	{
+            if (!defined('STDIN')) {
 		$uri = $this->_detect_uri();
-		if($uri == '/') return array('default','default',array());
-		
-		/*
-		$rewrite_dir_name = $this->config->server_rewrite_dir_name;
-		if(!isset($_GET[$rewrite_dir_name]) or empty($_GET[$rewrite_dir_name])) return array('default','default',array());
-		$dir =  $_GET[$rewrite_dir_name];
-		//remove last slash from directory name
-		if($dir[strlen($dir)-1] == '/'){
-			$dir = substr($dir,0,strlen($dir)-1);
-		}
-		*/
-		
-		$dirs = explode('/',$uri);
+            }else{
+                global $argv;
+                if(isset($argv[1])) $uri = $argv[1];
+                else $uri = '/';
+            }
+		if($uri == '/') return array('default','default',array());		            
+            	$dirs = explode('/',$uri);
 		$class_name = $dirs[0];
 		//extract arguments
 		if(count($dirs) > 2) $arguments = array_slice($dirs, 2);

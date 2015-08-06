@@ -4,23 +4,27 @@
 .submit_button2  {
 	color: #FFF;
         background-color: #ef6012;
-	padding: 3px;
-	font-weight: bold;
-        font-size: 1.5em;
+	padding: 0.2em;
+        font-size: 0.8em;
 	text-decoration: none;
 	margin-top: 1px;
 	margin-right: 2px;
 	margin-bottom: 2px;
 	margin-left: 1px;
 	border: thin solid #333;
+        border-radius: 0.3em;        
+}
+
+.submit_button2:hover{
+    color: #00F;
+    font-weight:bold;
 }
 
 .submit_button1   {
 	background-color: #00F;
 	color: #FFF;
-	padding: 3px;
-	font-weight: bold;
-        font-size: 1.5em;
+	padding: 0.3em;
+        font-size: 0.8em;
 	font-family: Georgia, "Times New Roman", Times, serif;
 	margin-top: 1px;
 	margin-right: 2px;
@@ -28,12 +32,21 @@
 	margin-left: 1px;
 	border: thin solid #333;
 	text-decoration: none;
+        border-radius: 0.3em;
+}
+
+.submit_button1:hover{
+    color: orange;
+    font-weight:bold;
 }
 
 body {
     
 }
 
+button, input{
+    border-radius: 0.4em;
+}
 
 
 input[type='text'],textarea {font-size:1em;}
@@ -170,8 +183,9 @@ section {
     margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 1px;
-    padding:3px;
+    padding:0.3em;
     border: thin solid #ef6012;
+    border-radius: 0.4em;
 }
 
 section h4 {
@@ -195,6 +209,7 @@ section #result_block{
         border: thin solid #ef6012;
         margin:6px;
         padding: 4px;
+        border-radius: 0.4em;
 }
 
 .result_table{
@@ -230,6 +245,11 @@ section #result_block{
 	display:none;
 }
 
+#actions div{
+    clear:both;
+    margin:5px;
+}
+
 #question{
 	display:none;
         color: #FFF;
@@ -240,6 +260,7 @@ section #result_block{
         font-weight: bold;
         text-align: center;
         font-size: 1.5em;
+        border-radius: 0.4em;
 }
 
 #answer{

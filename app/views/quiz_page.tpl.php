@@ -64,11 +64,10 @@ window.onload = function(){
     <a href='#' id='show_actions'><img src='assets/images/button.png' alt='Actions' style="max-height: 20px;max-width: 50px;" /></a>
 
 <section id='actions'> 
-    <p></p>
-<a href='<?php echo $current_result ?>' class='submit_button1' >Result</a> &nbsp; &nbsp;
+ <a href='<?php echo $current_result ?>' class='submit_button1' >Result</a> 
 <a href='<?php echo $reset_link?>'class='submit_button2' >Reset Quiz</a>
-<p ><a href="<?php echo $user_link?>" class='submit_button2' ><?php echo $user_name?></a>
-<a href="<?php echo $logout_link?>" class='submit_button1' >Logout</a></p>
+<a href="<?php echo $user_link?>" class='submit_button2' ><?php echo $user_name?></a>
+<a href="<?php echo $logout_link?>" class='submit_button1' >Logout</a>
 </section>
 
 </div>

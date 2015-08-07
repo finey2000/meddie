@@ -131,9 +131,8 @@ Medara_quiz.prototype.prepare_quiz_data = function()
  * @returns {undefined}
  */
 Medara_quiz.prototype.register_anchors = function(){
-    var this_page = document.URL.split('#')[0];
   var real_anchors = $('a').not(function(index,element){
-     if(element.href.substr(0,this_page.length) === this_page) return true;
+     if(element.href.split('#')[0] === document.URL.split('#')[0])return true;     
   });
   real_anchors.click($.proxy(this.navigate_anchor,this));
 };

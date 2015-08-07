@@ -93,6 +93,23 @@ $this->Save_Quiz_Data('autospeak',$autospeak); // set whether to auto speak word
 $this->Save_Quiz_Data('autonew',$autonew); // set whether to auto display a new question after the answer of a previous question has been displayed
 }
 
+    /**
+     * Helps modify quiz settings while game is in session
+     * @param type $mode
+     * @param type $multiple_trials
+     * @param type $autospeak
+     * @param type $autonew
+     */
+    public function updateQuizSettings($mode,$multiple_ts,$autospeak,$autonew){
+        if($multiple_ts) $multiple_trials = true;
+        else $multiple_trials = false;        
+        $this->Save_Quiz_Data('mode',$mode);
+        $this->Save_Quiz_Data('multiple_trials',$multiple_trials);        
+        $this->Save_Quiz_Data('autospeak',$autospeak);
+        $this->Save_Quiz_Data('autonew',$autonew);
+        return true;
+    }
+
 /**
 Checks if the quiz is over
  * by counting the total number of subjects available

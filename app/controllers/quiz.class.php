@@ -59,6 +59,68 @@ class Quiz extends Lobby
 		}
 		
 	}
+        
+        /**
+         * Helps change current game settings
+         */
+        public function game_settings(){
+		if(! $this->validate_user()) return;
+                //redirect to homepage if user is logged in but does not have a game session
+                if(!$this->quiz_model->in_game())
+		{	                                          
+		 header('Location: '.$this->utility->show_site());
+                 return;
+		 }
+                                    //redirect to results page if quiz is over
+                                    if($this->quiz_model->Quiz_Over())
+                                    {	                                          
+                                     header('Location: '.$this->utility->show_site('final-result'));
+                                     return;
+                                     }        
+                                     //process settings change request here
+                    if($_POST && isset($_POST['cmd']) && $_POST['cmd'] == 'gsettings'){
+                      $mode = filter_input(INPUT_POST,'mode');
+                      $multiple_trials = filter_input(INPUT_POST,'mtrials');
+                      $autospeak = intval(filter_input(INPUT_POST,'autospeak'));
+                      $autonew = intval(filter_input(INPUT_POST,'autonew'));  
+                      $this->quiz_model->updateQuizSettings($mode,$multiple_trials,$autospeak,$autonew);
+                      header('Location: '.show_site('game'));
+                      return;
+                    }
+                    //define current settings to be displayed
+                    $vData = array('formAction'=>'/game-settings','gameLink'=>show_site('game'));
+                    if($this->quiz_model->Is_Multi_Mode()) {
+                          $vData['multiModeTrue'] = '';
+                          $vData['multiModeFalse'] = 'CHECKED';  
+                    }else{ 
+                          $vData['multiModeTrue'] = 'CHECKED';
+                          $vData['multiModeFalse'] = '';                          
+                    }
+                    if($this->quiz_model->autospeakEnabled()) {
+                          $vData['autospeakTrue'] = 'CHECKED';
+                          $vData['autospeakFalse'] = '';
+                    }else{
+                          $vData['autospeakTrue'] = '';
+                          $vData['autospeakFalse'] = 'CHECKED';                        
+                    }  
+                    if($this->quiz_model->autonewEnabled()) {
+                          $vData['autonewTrue'] = 'CHECKED';
+                          $vData['autonewFalse'] = '';
+                    }else{
+                          $vData['autonewTrue'] = '';
+                          $vData['autonewFalse'] = 'CHECKED';                        
+                    } 
+                    if($this->quiz_model->Allows_Multiple_Trials()) {
+                          $vData['multiTriesTrue'] = 'CHECKED';
+                          $vData['multiTriesFalse'] = '';
+                    }else{
+                          $vData['multiTriesTrue'] = '';
+                          $vData['multiTriesFalse'] = 'CHECKED';                        
+                    }                    
+		$body = $this->view->display_page('game-settings',$vData,true);
+		$this->view->create_page($body,'Change Game Settings');
+		return;                                     
+        }
 	
         /**
          * initiates the importation of new data into the database
@@ -147,6 +209,7 @@ class Quiz extends Lobby
     $view_data['user_name'] = $username;
     $view_data['user_link'] = show_site('user');
     $view_data['about_page'] = show_site('about');
+    $view_data['settingsLink'] = show_site('game-settings');    
     $view_data['logout_link'] = show_site('user/logout');
     $body = $this->view->display_page('quiz_page',$view_data,true);
     $this->view->create_page($body,'Medara: Words/Phrases Quiz');

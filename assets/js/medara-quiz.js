@@ -67,7 +67,10 @@ function Medara_quiz(quiz_body_id,site_url)
 	//register submit handler for submit event
         $('#quiz_answer').submit($.proxy(this.submit_answer,this));
         //register click handler for next action
-        this.quiz_page.next_action.click($.proxy(this.next_action,this));            
+        this.quiz_page.next_action.click($.proxy(this.next_action,this));      
+        $('#previous-result').click($.proxy(this.showPreviousResult,this));      //click handler for showing previous results
+      //set html and set word marking handler
+      $('#mark_word').click($.proxy(this.mark_previous,this));        
         //register click handler for show actions
         $('#show_actions').click($.proxy(function(){this.quiz_page.actions_div.toggle();},this));
         //register click handler for show examples
@@ -453,7 +456,7 @@ Medara_quiz.prototype.process_answer = function(answer)
         if(cur_ques.answer.trim().toLowerCase() === answer.toLowerCase())
         { grading = true; } //correct   
         else{ grading = false;}    
-         var prev_ques = this.prev_ques = {'id':cur_ques.id,'grade':grading,'marked':cur_ques.marked};
+         var prev_ques = this.prev_ques = {id:cur_ques.id,grade:grading,marked:cur_ques.marked,question:cur_ques.question};
         //push current question into answered questions and delete current question
         this.answered_ques.push(prev_ques);       
         //update number of answered questions on status object
@@ -486,6 +489,7 @@ Medara_quiz.prototype.process_answer = function(answer)
             //update quiz status here
             
             //display result
+        $('#previous-result').hide();            
  this.quiz_page.result_block.show(); 
 this.quiz_page.next_action.focus();
   };
@@ -558,8 +562,8 @@ this.quiz_page.next_action.focus();
       }else{
           mark = 'Mark';
       }
-      //set html and set word marking handler
-      $('#mark_word').html(mark).click($.proxy(this.mark_previous,this));
+      //set mark html
+      $('#mark_word').html(mark);
       //populate examples area
       if(question.examples){
           $('#show_examples').show();
@@ -600,6 +604,7 @@ this.quiz_page.next_action.focus();
         if(this.quiz_status.multi_mode) this.quiz_page.multi_answer_block.find('input').removeClass('submit_button2').addClass('submit_button1');
 	this.display_question();
 	this.display_answer_div();
+        $('#previous-result').show();
         
       }
             if(this.quiz_status.next_action === 'result')
@@ -674,3 +679,15 @@ Medara_quiz.prototype.clear_answer_form = function()
 	}
 };
 
+/**
+ * redisplays last quiz result as activated by user
+ * @returns {undefined}
+ */
+Medara_quiz.prototype.showPreviousResult = function(){
+	//hide answer block
+        this.quiz_page.answer_block.toggle();    
+        $('#previous-result').hide();      
+        this.quiz_page.question_block.html(this.prev_ques.question);
+        this.quiz_page.result_block.show(); 
+        this.quiz_page.next_action.focus();
+};

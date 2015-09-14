@@ -58,7 +58,7 @@ window.onload = function(){
 </div>
 
 <div id='quiz_misc' style='clear: both;'>
-    <p></p>
+    <div id="previous-result"><button title='Show previous result'><=</button> </div>
     <div id='status' class="status_info"> <p>Please activate Javascript to continue with this quiz </p></div>
 
     <a href='#' id='show_actions'><img src='assets/images/button.png' alt='Actions' style="max-height: 20px;max-width: 50px;" /></a>

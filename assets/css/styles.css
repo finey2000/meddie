@@ -349,3 +349,7 @@ section #result_block{
     height: 1.5em;
     margin-top: 5px;
 }
+
+#previous-result{
+    display:none;
+}

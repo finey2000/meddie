@@ -83,7 +83,8 @@ class Quiz extends Lobby
                       $multiple_trials = filter_input(INPUT_POST,'mtrials');
                       $autospeak = intval(filter_input(INPUT_POST,'autospeak'));
                       $autonew = intval(filter_input(INPUT_POST,'autonew'));  
-                      $this->quiz_model->updateQuizSettings($mode,$multiple_trials,$autospeak,$autonew);
+                      $addLatest = intval(filter_input(INPUT_POST,'addlatest'));                        
+                      $this->quiz_model->updateQuizSettings($mode,$multiple_trials,$autospeak,$autonew,$addLatest);
                       header('Location: '.show_site('game'));
                       return;
                     }
@@ -116,7 +117,8 @@ class Quiz extends Lobby
                     }else{
                           $vData['multiTriesTrue'] = '';
                           $vData['multiTriesFalse'] = 'CHECKED';                        
-                    }                    
+                    }  
+                    $vData['latestCount'] = $this->quiz_model->getQuizLatestWordCount();
 		$body = $this->view->display_page('game-settings',$vData,true);
 		$this->view->create_page($body,'Change Game Settings');
 		return;                                     

@@ -82,6 +82,75 @@ $this->Get_Affected_Rows();
 $this->db_query_count++;
 }
 
+/**
+ * returns the last insert id
+ */
+public function lastInsertId(){
+    return mysqli_insert_id($this->db_connection);
+}
+
+
+/**
+ * for escaping db strings
+ * @param type $string
+ * @return type
+ */
+public function quote($string){
+    return mysqli_real_escape_string($this->db_connection,$string);
+}
+
+public function fetchValue($query)
+{
+$result = mysqli_query($this->db_connection,$query) or die(mysqli_error($this->db_connection).' THE QUERY IS: '.$query);
+$this->db_query_count++;
+$result2 = mysqli_fetch_array($result);
+if(empty($result2)){return false;}
+$value = $result2[key($result2)];
+return $value;
+}
+
+
+/**
+ * Fetch an array of single values using a query
+ * Note: only ONE column from each row [0] can be retrieved
+ * --------------------------------------------------------
+ *	@param string $query		: the SQL query
+ *	@return array				: an array of the values or null
+ */
+public function fetchValues($query) {
+	$results = array();
+	if (!($sth = mysqli_query($this->db_connection,$query))) die(mysqli_error($this->db_connection).' THE QUERY IS: '.$query);
+	while ($row = mysqli_fetch_row($sth)) $results[] = $row[0];
+	mysqli_free_result($sth);
+	return $results;
+	}
+
+public function fetchArray($query,$assoc=false) {
+$sth = mysqli_query($this->db_connection,$query) or die(mysqli_error($this->db_connection).' THE QUERY IS: '.$query);
+	if (! $sth) return null;
+	if(!$assoc) $record = mysqli_fetch_row($sth);
+        else $record = mysqli_fetch_assoc($sth);
+	mysqli_free_result($sth);
+	return $record;
+	}
+
+/*
+ * Fetch ALL records for a query & return an array of arrays/records
+ *	P1 = query string
+ *      P2 = $assoc fecth as an associative array
+ *	returns an array of arrays/records or null on failure
+ */
+public function fetchArrays($query,$assoc=false) {
+	$results = array();
+	if (!($sth = mysqli_query($this->db_connection,$query))) die(mysqli_error($this->db_connection).' THE QUERY IS: '.$query);
+	if (!$sth) return null;
+        if($assoc) $fetch_handler = 'mysqli_fetch_assoc';
+        else $fetch_handler = 'mysqli_fetch_row';
+	while ($row = $fetch_handler($sth)) $results[] = $row;
+	mysqli_free_result($sth);
+	return $results;
+	}
+        
 public function Escape_String_For_Db($string){
 return mysqli_real_escape_string($this->db_connection,$string);
 }

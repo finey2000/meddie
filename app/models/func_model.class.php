@@ -52,7 +52,7 @@ public function save_new_keyword($word_data){
     }
 $query = "INSERT INTO keyword ($names) VALUES ($values)";
 $this->dataman->Query_Db_In($query);
-
+return $this->dataman->lastInsertId();
 }
 
 /**

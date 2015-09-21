@@ -100,13 +100,28 @@ $this->Save_Quiz_Data('autonew',$autonew); // set whether to auto display a new 
      * @param type $autospeak
      * @param type $autonew
      */
-    public function updateQuizSettings($mode,$multiple_ts,$autospeak,$autonew){
+    public function updateQuizSettings($mode,$multiple_ts,$autospeak,$autonew,$addLatest=0){
         if($multiple_ts) $multiple_trials = true;
         else $multiple_trials = false;        
         $this->Save_Quiz_Data('mode',$mode);
         $this->Save_Quiz_Data('multiple_trials',$multiple_trials);        
         $this->Save_Quiz_Data('autospeak',$autospeak);
         $this->Save_Quiz_Data('autonew',$autonew);
+        if($addLatest){
+            //add latest words to current quiz
+            $current = $this->Get_Quiz_Data('subjects');
+            $latest = $this->getLatestWords();
+            $latestCurrent = array_unique(array_merge($current,$latest));
+            sort($latestCurrent);
+            $realLatest = array_diff($latestCurrent,$current);
+                        if($realLatest){
+                            $this->Save_Quiz_Data('subjects',$latestCurrent);
+                            $this->Save_Quiz_Data('test_qs',$this->Get_Quiz_Data('test_qs')+count($realLatest));
+                            $this->Save_Quiz_Data('requested_qs',$this->Get_Quiz_Data('requested_qs')+count($realLatest));
+                            $this->Save_Quiz_Data('available_qs',$this->Get_Quiz_Data('available_qs')+count($realLatest));            
+                        }
+                             
+        }
         return true;
     }
 
@@ -633,6 +648,7 @@ public function import_new_quiz_data()
 //remove the headers
 $titles = str_getcsv(array_shift($all_keywords));
 $info = 0;
+$wordIds = array();
 //load all keyword data from the db
 $this->func_model->load_all_keyword_data();
 foreach($all_keywords as $keyword){
@@ -644,10 +660,48 @@ foreach($titles as $title_key => $title)
 $compiled_keyword_data[$title] = trim($this->dataman->Escape_String_For_Db($keyword_data[$title_key])); 
 
 }
-    $this->func_model->save_new_keyword($compiled_keyword_data);
+    $wordId = $this->func_model->save_new_keyword($compiled_keyword_data);
+    if(is_numeric($wordId)) $wordIds[] = $wordId;
     $info++;
 }
+//log import info
+$startWord = $wordIds[0];
+$endWord = end($wordIds);
+$today = date('Y-m-d H:i:s');
+$this->dataman->Query_Db_In("INSERT INTO medara.import_info (date,start_id,end_id)VALUES('$today',$startWord,$endWord)");
 return $info;
+}
+
+/**
+ * returns the number of the latest words that were added to the word database
+ */
+public function countLatestWords(){
+    $sql = 'SELECT count(id) 
+            FROM medara.keyword as keyword 
+            WHERE keyword.id >= (SELECT start_id FROM medara.import_info ORDER BY id desc LIMIT 1) 
+            AND keyword.id <= (SELECT end_id FROM medara.import_info ORDER BY id desc LIMIT 1)';
+    return $this->dataman->fetchValue($sql);
+}
+
+/**
+ * returns a count of new words that have been added to the db since the last time the user updated the quiz questions
+ */
+public function getQuizLatestWordCount(){
+    $lastWordId = $this->dataman->fetchValue('SELECT end_id FROM medara.import_info ORDER BY id desc LIMIT 1');
+    $current = $this->Get_Quiz_Data('subjects');
+    if(in_array($lastWordId,$current)) return 0;
+    else return $this->countLatestWords();
+}
+
+/**
+ * returns the latest words that were added to the word database
+ */
+public function getLatestWords(){
+    $sql = 'SELECT id 
+            FROM medara.keyword as keyword 
+            WHERE keyword.id >= (SELECT start_id FROM medara.import_info ORDER BY id desc LIMIT 1) 
+            AND keyword.id <= (SELECT end_id FROM medara.import_info ORDER BY id desc LIMIT 1)';
+    return $this->dataman->fetchValues($sql);
 }
 
 }//end of class

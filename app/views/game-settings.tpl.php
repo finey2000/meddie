@@ -24,6 +24,11 @@
 <input type="radio" name="autonew" value="0" <?=$autonewFalse?> />No
 </section>
 
+ <section>
+<h4 title="Add latest added words to your current quiz">Add latest words (<?=$latestCount?>)</h4>
+<input type="radio" name="addlatest" value="1"   />Yes
+<input type="radio" name="addlatest" value="0" CHECKED />No
+</section>
 
 <input type=hidden name=cmd value=gsettings />
 <p><input type="submit" title='Save and return to game' value="SAVE" class="submit_button2" /> <a href='<?=$gameLink?>' class='submit_button1' >Cancel</a></p>

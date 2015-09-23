@@ -200,12 +200,12 @@ private function save_keyword_data($data = null){
 
 if(!is_null($data)){
 $this->keyword_data = $data;
-if($this->users_model->user) $this->users_model->user->save_data('func_data',$data);
+if($this->users_model->user) $this->users_model->user->save_data('func_data',array()); //save function info no more on user data table
 return;
 }else{
 
 //load function data from user account
-	if($this->users_model->user) $this->keyword_data = $this->users_model->user->get_data('func_data');
+	//if($this->users_model->user) $this->keyword_data = $this->users_model->user->get_data('func_data');
 	//if not available, load from db
 	if(!$this->keyword_data) $this->get_keyword_data();
 }

@@ -59,12 +59,12 @@ function validate_form()
 <?php if($marked_functions){?>
     <section id='source_qs' onchange="toggle_category();" >
 <h4>Select Source Questions:</h4>
-<input type="radio" name="source" value="1" id='sel_cat' />All Available
-<input type="radio" name="source" value="3" CHECKED />All Marked (<?php echo $marked_functions ?>)
+<input type="radio" name="source" value="1" id='sel_cat' CHECKED />All Available
+<input type="radio" name="source" value="3"  />All Marked (<?php echo $marked_functions ?>)
 <input type="radio" name="source" value="2" />All Unmarked (<?php echo $unmarked_functions ?>)
 </section>
 <?php }else{?>
-<input type="hidden" name="source" value="1" id='sel_cat' CHECKED />
+<input type="hidden" name="source" value="1" id='sel_cat' />
 <?php }?>
 
 <!-- START category div -->
@@ -82,8 +82,8 @@ function validate_form()
 
 <section>
 <h4>Quiz Mode</h4>
-<input type="radio" name="mode" value="2" CHECKED />Single Question Style
-<input type="radio" name="mode" value="1" />Multi-Choice Questions
+<input type="radio" name="mode" value="2" />Single Question Style
+<input type="radio" name="mode" value="1" CHECKED />Multi-Choice Questions
 </section>
 
 <section>
@@ -94,14 +94,14 @@ function validate_form()
 
 <section>
 <h4 title="Automatically pronounce words after results disclosure">Allow Auto Speak</h4>
-<input type="radio" name="autospeak" value="1"  />Yes
-<input type="radio" name="autospeak" value="0" CHECKED />No
+<input type="radio" name="autospeak" value="1" CHECKED />Yes
+<input type="radio" name="autospeak" value="0" />No
 </section>
 
 <section>
 <h4 title="Automatically display a new question after the answer of a previous question has been displayed">Autoload New Questions</h4>
-<input type="radio" name="autonew" value="1"  />Yes
-<input type="radio" name="autonew" value="0" CHECKED />No
+<input type="radio" name="autonew" value="1" CHECKED />Yes
+<input type="radio" name="autonew" value="0"  />No
 </section>
 
 <section>
